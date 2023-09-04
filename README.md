@@ -1,3 +1,4 @@
 # blog
-usecase <br>
-![image](https://github.com/JeongJaeIk1207/blog/assets/138690080/76ac781f-c319-46a5-ad46-9a4348dc1fdc)
+# ERD 설계 <br>
+![image](https://github.com/JeongJaeIk1207/Lv3Assignment/assets/138690080/4fcb0ac1-2e37-4284-b20f-618f7205423e)
+
