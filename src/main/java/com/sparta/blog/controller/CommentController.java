@@ -1,6 +1,5 @@
 package com.sparta.blog.controller;
 
-import com.sparta.blog.dto.BoardRequestDto;
 import com.sparta.blog.dto.CommentRequestDto;
 import com.sparta.blog.security.UserDetailsImpl;
 import com.sparta.blog.service.CommentService;

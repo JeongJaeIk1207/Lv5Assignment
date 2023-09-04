@@ -1,11 +1,11 @@
 package com.sparta.blog.dto;
 
 import com.sparta.blog.entity.Board;
-import com.sparta.blog.entity.Comment;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Getter
@@ -25,9 +25,9 @@ public class BoardResponseDto {
         this.createdAt = board.getCreatedAt();
         this.modifiedAt = board.getModifiedAt();
         this.username = board.getUser().getUsername();
-        for (Comment comment : board.getCommentsList()) {
-            commentList.add(new CommentResponseDto(comment));
-        }
+        board.getCommentsList().forEach(comment -> commentList.add(new CommentResponseDto(comment)));
+        Collections.reverse(commentList);
     }
+
 }
 

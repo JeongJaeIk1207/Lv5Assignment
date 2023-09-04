@@ -1,8 +1,6 @@
 package com.sparta.blog.service;
 
-import com.sparta.blog.dto.BoardRequestDto;
 import com.sparta.blog.dto.CommentRequestDto;
-import com.sparta.blog.dto.CommentResponseDto;
 import com.sparta.blog.entity.Board;
 import com.sparta.blog.entity.Comment;
 import com.sparta.blog.entity.User;

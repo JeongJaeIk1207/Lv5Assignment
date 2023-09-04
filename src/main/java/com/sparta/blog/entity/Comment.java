@@ -1,7 +1,6 @@
 package com.sparta.blog.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sparta.blog.dto.BoardRequestDto;
 import com.sparta.blog.dto.CommentRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
