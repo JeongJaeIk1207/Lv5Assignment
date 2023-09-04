@@ -34,12 +34,11 @@ public class BoardController {
         return boardService.createBoard(boardRequestDto, userDetails.getUser());
     }
 
+    // 게시글 별 조회
     @GetMapping("/board/{id}")
     public BoardResponseDto getBoardById(@PathVariable Long id) {
         return boardService.getBoardById(id);
     }
-
-
 
 
     //수정
@@ -50,8 +49,8 @@ public class BoardController {
 
     // 삭제
     @DeleteMapping("/board/{id}")
-    public ResponseEntity<String> deleteBoard(@PathVariable Long id, @RequestBody BoardRequestDto boardRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return boardService.deleteBoard(id, boardRequestDto, userDetails.getUser());
+    public ResponseEntity<String> deleteBoard(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return boardService.deleteBoard(id, userDetails.getUser());
     }
 
 }

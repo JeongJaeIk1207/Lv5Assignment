@@ -3,6 +3,7 @@ package com.sparta.blog.service;
 import com.sparta.blog.dto.BoardRequestDto;
 import com.sparta.blog.dto.BoardResponseDto;
 import com.sparta.blog.entity.Board;
+import com.sparta.blog.entity.Comment;
 import com.sparta.blog.entity.User;
 import com.sparta.blog.repository.BoardRepository;
 import com.sparta.blog.security.UserDetailsImpl;
@@ -56,7 +57,7 @@ public class BoardService {
     }
 
     //삭제
-    public ResponseEntity<String> deleteBoard(Long id, BoardRequestDto boardRequestDto, User user) {
+    public ResponseEntity<String> deleteBoard(Long id, User user) {
         Board board = findBoard(id);
 
         if(!board.getUser().getUsername().equals(user.getUsername())) {
@@ -66,7 +67,7 @@ public class BoardService {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("삭제완료");
     }
 
-    //검색
+    //아이디값 검색
     private Board findBoard(Long id) {
         return boardRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("선택한 게시글이 없습니다."));
     }
