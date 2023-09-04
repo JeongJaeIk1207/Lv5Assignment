@@ -31,27 +31,6 @@ public class UserController {
     @PostMapping("/auth/signup")
     // 회원가입 하는 코드
     public ResponseEntity<String> signup(@Valid @RequestBody SignupRequestDto requestDto, BindingResult bindingResult) {
-        // Validation 예외처리
-        List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-        if(fieldErrors.size() > 0) {
-            for (FieldError fieldError : bindingResult.getFieldErrors()) {
-                log.error(fieldError.getField() + " 필드 : " + fieldError.getDefaultMessage());
-                return new ResponseEntity<>("상태코드 : " + HttpStatus.BAD_REQUEST.value() +", 메세지 : " +fieldError.getDefaultMessage(), HttpStatus.BAD_REQUEST);
-            }
-        }
-
-        String username = requestDto.getUsername();
-
-        Optional<User> checkUsername = userRepository.findByUsername(username);
-        if (checkUsername.isPresent()) {
-            String error = "중복된 사용자가 존재합니다.";
-            return new ResponseEntity<>("상태코드 : " + HttpStatus.BAD_REQUEST.value() +", 메세지 : " + error , HttpStatus.BAD_REQUEST);
-        }
-
-        userService.signup(requestDto);
-
-        return new ResponseEntity<>("상태코드 : " + HttpStatus.OK.value() + ", 회원가입 성공", HttpStatus.OK);
+        return userService.signup(requestDto);
     }
-
-
 }
