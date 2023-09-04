@@ -28,7 +28,7 @@ public class Board extends Timestamped{
     private User user;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
-    private List<Comment> commentsList;
+    private List<Comment> commentsList = new ArrayList<>();
 
 
     public Board(BoardRequestDto boardrequestDto, User user) {

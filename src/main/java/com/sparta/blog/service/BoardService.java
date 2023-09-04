@@ -3,15 +3,13 @@ package com.sparta.blog.service;
 import com.sparta.blog.dto.BoardRequestDto;
 import com.sparta.blog.dto.BoardResponseDto;
 import com.sparta.blog.entity.Board;
-import com.sparta.blog.entity.Comment;
 import com.sparta.blog.entity.User;
+import com.sparta.blog.entity.UserRoleEnum;
 import com.sparta.blog.repository.BoardRepository;
-import com.sparta.blog.security.UserDetailsImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -49,22 +47,33 @@ public class BoardService {
     @Transactional
     public ResponseEntity<String> updateBoard(Long id, BoardRequestDto boardRequestDto, User user) {
         Board board = findBoard(id);
+
+        // 어드민 체크
+        if (user.getRole() == UserRoleEnum.ADMIN) {
+            board.update(boardRequestDto, user);
+            return ResponseEntity.status(200).body("상태코드 : " + HttpStatus.OK.value() + " 메세지 : 관리자 권한 게시물 수정 성공"); }
+
+        // 일반 유저일 때
         if (!board.getUser().getUsername().equals(user.getUsername())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("안돼");
-        }
+            return ResponseEntity.status(400).body("상태코드 : " + HttpStatus.BAD_REQUEST.value() + " 메세지 : 선생님 게시물이 아닙니다.");}
         board.update(boardRequestDto, user);
-        return ResponseEntity.status(HttpStatus.OK).body("게시글 수정 성공 ^.<");
+        return ResponseEntity.status(200).body("상태코드 : " + HttpStatus.OK.value() + " 메세지 : 게시물 수정 성공");
     }
 
     //삭제
     public ResponseEntity<String> deleteBoard(Long id, User user) {
         Board board = findBoard(id);
 
-        if(!board.getUser().getUsername().equals(user.getUsername())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("안돼");
-        }
+        // 어드민 체크
+        if (user.getRole() == UserRoleEnum.ADMIN) {
+            boardRepository.delete(board);
+            return ResponseEntity.status(200).body("상태코드 : " + HttpStatus.OK.value() + " 메세지 : 관리자 권한 게시물 삭제 성공"); }
+
+        // 일반 유저일 때
+        if (!board.getUser().getUsername().equals(user.getUsername())) {
+            return ResponseEntity.status(400).body("상태코드 : " + HttpStatus.BAD_REQUEST.value() + " 메세지 : 선생님 게시물이 아닙니다.");}
         boardRepository.delete(board);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("삭제완료");
+        return ResponseEntity.status(200).body("상태코드 : " + HttpStatus.OK.value() + " 메세지 : 게시물 삭제 성공");
     }
 
     //아이디값 검색

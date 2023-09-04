@@ -6,6 +6,7 @@ import com.sparta.blog.dto.CommentResponseDto;
 import com.sparta.blog.entity.Board;
 import com.sparta.blog.entity.Comment;
 import com.sparta.blog.entity.User;
+import com.sparta.blog.entity.UserRoleEnum;
 import com.sparta.blog.repository.BoardRepository;
 import com.sparta.blog.repository.CommentRepository;
 import org.springframework.http.HttpStatus;
@@ -46,21 +47,32 @@ public class CommentService {
     @Transactional
     public ResponseEntity<String> updateComment(Long id, CommentRequestDto commentRequestDto, User user) {
         Comment comment = findComment(id);
+        // 어드민 체크
+        if (user.getRole() == UserRoleEnum.ADMIN) {
+            comment.update(commentRequestDto,user);
+            return ResponseEntity.status(200).body("상태코드 : " + HttpStatus.OK.value() + " 메세지 : 관리자 권한 댓글 수정 성공"); }
+
+        // 일반 유저일 때
         if (!comment.getUser().getUsername().equals(user.getUsername())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("안돼");
-        }
-        comment.update(commentRequestDto,user);
-        return ResponseEntity.status(HttpStatus.OK).body("댓글 수정 성공 ^.<");
+            return ResponseEntity.status(400).body("상태코드 : " + HttpStatus.BAD_REQUEST.value() + " 메세지 : 선생님 댓글이 아닙니다.");}
+            comment.update(commentRequestDto,user);
+        return ResponseEntity.status(200).body("상태코드 : " + HttpStatus.OK.value() + " 메세지 : 댓글 수정 성공");
     }
+
 
     //삭제
     public ResponseEntity<String> deleteComment(Long id, User user) {
         Comment comment = findComment(id);
-        if(!comment.getUser().getUsername().equals(user.getUsername())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("안돼");
-        }
+        // 어드민 체크
+        if (user.getRole() == UserRoleEnum.ADMIN) {
+            commentRepository.delete(comment);
+            return ResponseEntity.status(200).body("상태코드 : " + HttpStatus.OK.value() + " 메세지 : 관리자 권한 댓글 삭제 성공"); }
+
+        // 일반 유저일 때
+        if (!comment.getUser().getUsername().equals(user.getUsername())) {
+            return ResponseEntity.status(400).body("상태코드 : " + HttpStatus.BAD_REQUEST.value() + " 메세지 : 선생님 댓글이 아닙니다.");}
         commentRepository.delete(comment);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("삭제완료");
+        return ResponseEntity.status(200).body("상태코드 : " + HttpStatus.OK.value() + " 메세지 : 댓글 삭제 성공");
     }
 
 
