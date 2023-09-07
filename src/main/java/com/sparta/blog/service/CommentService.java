@@ -24,17 +24,17 @@ public class CommentService {
 
     //생성
     @Transactional
-    public ResponseEntity<String> createComment(CommentRequestDto commentRequestDto, User user, Long id) {
-        Board board = findBoard(id);
+    public ResponseEntity<String> createComment(CommentRequestDto commentRequestDto, User user) {
+        Board board = boardRepository.findBoardById(commentRequestDto.getBoardId()).orElseThrow(() -> new IllegalArgumentException("선택한 게시글이 없습니다."));
         Comment comment = new Comment(commentRequestDto, user, board);
         commentRepository.save(comment);
 
         return ResponseEntity.status(HttpStatus.OK).body("댓글 작성 성공 ^.<");
     }
 
-    private Board findBoard(Long id) {
-        return boardRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("선택한 게시글이 없습니다."));
-    }
+//    private Board findBoard(Long id) {
+//        return boardRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("선택한 게시글이 없습니다."));
+//    }
 
     private Comment findComment(Long id) {
         return commentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("선택한 댓글이 없습니다."));

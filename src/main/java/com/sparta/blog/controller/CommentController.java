@@ -17,12 +17,11 @@ public class CommentController {
     }
 
     //댓글 작성
-    @PostMapping("/comment/{id}")
+    @PostMapping("/comment")
     public ResponseEntity<String> createComment(
             @RequestBody CommentRequestDto commentRequestDto,
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @PathVariable Long id) {
-        return commentService.createComment(commentRequestDto, userDetails.getUser(), id);
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return commentService.createComment(commentRequestDto, userDetails.getUser());
     }
 
     //수정
