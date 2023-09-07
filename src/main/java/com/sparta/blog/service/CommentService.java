@@ -46,7 +46,7 @@ public class CommentService {
     public ResponseEntity<String> updateComment(Long id, CommentRequestDto commentRequestDto, User user) {
         Comment comment = findComment(id);
         // 어드민 체크
-        if (user.getRole() == UserRoleEnum.ADMIN) {
+        if (user.getRole().equals(UserRoleEnum.ADMIN)) {
             comment.update(commentRequestDto,user);
             return ResponseEntity.status(200).body("상태코드 : " + HttpStatus.OK.value() + " 메세지 : 관리자 권한 댓글 수정 성공"); }
 
@@ -62,7 +62,7 @@ public class CommentService {
     public ResponseEntity<String> deleteComment(Long id, User user) {
         Comment comment = findComment(id);
         // 어드민 체크
-        if (user.getRole() == UserRoleEnum.ADMIN) {
+        if (user.getRole().equals(UserRoleEnum.ADMIN)) {
             commentRepository.delete(comment);
             return ResponseEntity.status(200).body("상태코드 : " + HttpStatus.OK.value() + " 메세지 : 관리자 권한 댓글 삭제 성공"); }
 

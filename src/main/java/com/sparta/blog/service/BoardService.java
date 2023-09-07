@@ -49,7 +49,7 @@ public class BoardService {
         Board board = findBoard(id);
 
         // 어드민 체크
-        if (user.getRole() == UserRoleEnum.ADMIN) {
+        if (user.getRole().equals(UserRoleEnum.ADMIN)) {
             board.update(boardRequestDto, user);
             return ResponseEntity.status(200).body("상태코드 : " + HttpStatus.OK.value() + " 메세지 : 관리자 권한 게시물 수정 성공"); }
 
@@ -65,7 +65,7 @@ public class BoardService {
         Board board = findBoard(id);
 
         // 어드민 체크
-        if (user.getRole() == UserRoleEnum.ADMIN) {
+        if (user.getRole().equals(UserRoleEnum.ADMIN)) {
             boardRepository.delete(board);
             return ResponseEntity.status(200).body("상태코드 : " + HttpStatus.OK.value() + " 메세지 : 관리자 권한 게시물 삭제 성공"); }
 
