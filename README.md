@@ -1,4 +1,5 @@
 # blog
 # ERD 설계 <br>
-![image](https://github.com/JeongJaeIk1207/Lv3Assignment/assets/138690080/4fcb0ac1-2e37-4284-b20f-618f7205423e)
+![KakaoTalk_20230910_033939365](https://github.com/JeongJaeIk1207/Lv5Assignment/assets/138690080/0323b673-7633-4e4c-be5a-04632a71a610)
+
 
