@@ -2,6 +2,8 @@ package com.sparta.blog.controller;
 
 import com.sparta.blog.dto.CommentRequestDto;
 import com.sparta.blog.dto.MessageResponseDto;
+import com.sparta.blog.entity.Board;
+import com.sparta.blog.repository.BoardRepository;
 import com.sparta.blog.security.UserDetailsImpl;
 import com.sparta.blog.service.CommentService;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +37,12 @@ public class CommentController {
     @DeleteMapping("/comment/{id}")
     public ResponseEntity<MessageResponseDto> deleteComment(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return commentService.deleteComment(id, userDetails.getUser());
+    }
+
+    // 좋아요
+    @PutMapping("/comment/{id}/like")
+    public ResponseEntity<MessageResponseDto> likeBoard(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return commentService.likeBoard(id, userDetails.getUser());
     }
 
 
