@@ -1,6 +1,7 @@
 package com.sparta.blog.service;
 
 import com.sparta.blog.dto.CommentRequestDto;
+import com.sparta.blog.dto.MessageResponseDto;
 import com.sparta.blog.entity.Board;
 import com.sparta.blog.entity.Comment;
 import com.sparta.blog.entity.User;
@@ -43,37 +44,42 @@ public class CommentService {
 
     //수정
     @Transactional
-    public ResponseEntity<String> updateComment(Long id, CommentRequestDto commentRequestDto, User user) {
+    public ResponseEntity<MessageResponseDto> updateComment(Long id, CommentRequestDto commentRequestDto, User user) {
         Comment comment = findComment(id);
         // 어드민 체크
         if (user.getRole().equals(UserRoleEnum.ADMIN)) {
-            comment.update(commentRequestDto,user);
-            return ResponseEntity.status(200).body("상태코드 : " + HttpStatus.OK.value() + " 메세지 : 관리자 권한 댓글 수정 성공"); }
+            comment.update(commentRequestDto, user);
+            MessageResponseDto message = new MessageResponseDto("관리자 권한 댓글 수정 성공", HttpStatus.OK.value());
+            return ResponseEntity.status(HttpStatus.OK).body(message);
+        }
+            // 일반 유저일 때
+            if (!comment.getUser().getUsername().equals(user.getUsername())) {
+                throw new IllegalArgumentException("선생님의 댓글이 아닙니다.");
+            }
+            comment.update(commentRequestDto, user);
+            MessageResponseDto message = new MessageResponseDto("댓글 수정 성공", HttpStatus.OK.value());
+            return ResponseEntity.status(HttpStatus.OK).body(message);
+        }
 
-        // 일반 유저일 때
-        if (!comment.getUser().getUsername().equals(user.getUsername())) {
-            return ResponseEntity.status(400).body("상태코드 : " + HttpStatus.BAD_REQUEST.value() + " 메세지 : 선생님 댓글이 아닙니다.");}
-            comment.update(commentRequestDto,user);
-        return ResponseEntity.status(200).body("상태코드 : " + HttpStatus.OK.value() + " 메세지 : 댓글 수정 성공");
-    }
 
+        //삭제
+        public ResponseEntity<MessageResponseDto> deleteComment (Long id, User user){
+            Comment comment = findComment(id);
+            // 어드민 체크
+            if (user.getRole().equals(UserRoleEnum.ADMIN)) {
+                commentRepository.delete(comment);
+                MessageResponseDto message = new MessageResponseDto("관리자 권한 댓글 수정 성공", HttpStatus.OK.value());
+                return ResponseEntity.status(HttpStatus.OK).body(message);
+            }
 
-    //삭제
-    public ResponseEntity<String> deleteComment(Long id, User user) {
-        Comment comment = findComment(id);
-        // 어드민 체크
-        if (user.getRole().equals(UserRoleEnum.ADMIN)) {
+            // 일반 유저일 때
+            if (!comment.getUser().getUsername().equals(user.getUsername())) {
+                throw new IllegalArgumentException("선생님의 댓글이 아닙니다.");
+            }
             commentRepository.delete(comment);
-            return ResponseEntity.status(200).body("상태코드 : " + HttpStatus.OK.value() + " 메세지 : 관리자 권한 댓글 삭제 성공"); }
+            MessageResponseDto message = new MessageResponseDto("댓글 삭제 성공", HttpStatus.OK.value());
+            return ResponseEntity.status(HttpStatus.OK).body(message);
+        }
 
-        // 일반 유저일 때
-        if (!comment.getUser().getUsername().equals(user.getUsername())) {
-            return ResponseEntity.status(400).body("상태코드 : " + HttpStatus.BAD_REQUEST.value() + " 메세지 : 선생님 댓글이 아닙니다.");}
-        commentRepository.delete(comment);
-        return ResponseEntity.status(200).body("상태코드 : " + HttpStatus.OK.value() + " 메세지 : 댓글 삭제 성공");
+
     }
-
-
-
-
-}

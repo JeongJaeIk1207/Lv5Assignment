@@ -1,6 +1,7 @@
 package com.sparta.blog.controller;
 
 import com.sparta.blog.dto.CommentRequestDto;
+import com.sparta.blog.dto.MessageResponseDto;
 import com.sparta.blog.security.UserDetailsImpl;
 import com.sparta.blog.service.CommentService;
 import org.springframework.http.ResponseEntity;
@@ -26,13 +27,13 @@ public class CommentController {
 
     //수정
     @PutMapping("/comment/{id}")
-    public ResponseEntity<String> updateComment(@PathVariable Long id, @RequestBody CommentRequestDto commentRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<MessageResponseDto> updateComment(@PathVariable Long id, @RequestBody CommentRequestDto commentRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return commentService.updateComment(id, commentRequestDto, userDetails.getUser());
     }
 
     // 삭제
     @DeleteMapping("/comment/{id}")
-    public ResponseEntity<String> deleteComment(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<MessageResponseDto> deleteComment(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return commentService.deleteComment(id, userDetails.getUser());
     }
 

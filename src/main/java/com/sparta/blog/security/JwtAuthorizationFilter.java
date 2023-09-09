@@ -1,6 +1,8 @@
 package com.sparta.blog.security;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sparta.blog.exception.RestApiException;
 import com.sparta.blog.jwt.JwtUtil;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -29,15 +31,36 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         this.userDetailsService = userDetailsService;
     }
 
+    public boolean isEmpty(String str) {
+        if(str == null) {
+            return true;
+        }
+        return false;
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain) throws ServletException, IOException {
 
         String tokenValue = jwtUtil.getJwtFromHeader(req);
 
+//        if(isEmpty(tokenValue)) {
+//            res.setContentType("application/json");
+//            res.setCharacterEncoding("UTF-8");
+//            res.setStatus(403);
+//            RestApiException restApiException = new RestApiException(403, "토큰이 유효하지 않습니다.");
+//            res.getWriter().write(new ObjectMapper().writeValueAsString(restApiException));
+//            return;
+//        }
+
         if (StringUtils.hasText(tokenValue)) {
 
             if (!jwtUtil.validateToken(tokenValue)) {
                 log.error("Token Error");
+                res.setContentType("application/json");
+                res.setCharacterEncoding("UTF-8");
+                res.setStatus(403);
+                RestApiException restApiException = new RestApiException(403, "토큰이 유효하지 않습니다.");
+                res.getWriter().write(new ObjectMapper().writeValueAsString(restApiException));
                 return;
             }
 

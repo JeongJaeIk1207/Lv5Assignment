@@ -2,12 +2,15 @@ package com.sparta.blog.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.blog.dto.LoginRequestDto;
+import com.sparta.blog.dto.MessageResponseDto;
 import com.sparta.blog.entity.UserRoleEnum;
+import com.sparta.blog.exception.RestApiException;
 import com.sparta.blog.jwt.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -50,21 +53,21 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String token = jwtUtil.createToken(username, role);
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
         // 성공 내용 담아서 보내줄 수 있음
-        response.setContentType("text/plain");
+        response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        String massage = "로그인 성공";
-        response.getWriter().write("상태코드 : " + response.getStatus() +", 메세지 : " + massage);
+        MessageResponseDto message = new MessageResponseDto("로그인에 성공하였습니다.", HttpStatus.OK.value());
+        response.getWriter().write(new ObjectMapper().writeValueAsString(message));
     }
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
 
         // 오류 내용 담아서 보내줄 수 있음
-        String errorMessage = failed.getMessage();
+        response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        response.setContentType("text/plain");
         response.setStatus(401);
-        response.getWriter().write("상태코드 : " + response.getStatus() +", 메세지 : " + errorMessage);
+        RestApiException restApiException = new RestApiException(401, "회원을 찾을 수 없습니다.");
+        response.getWriter().write(new ObjectMapper().writeValueAsString(restApiException));
 
 
     }
