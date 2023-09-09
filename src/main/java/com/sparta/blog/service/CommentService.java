@@ -88,7 +88,7 @@ public class CommentService {
         Comment comment = findComment(id);
         Optional<Like> like = likeRepository.findByUserIdAndCommentId(user.getId(), id);
         if (like.isEmpty()) {
-            likeRepository.save(new Like(user, comment.getBoard(), comment));
+            likeRepository.save(new Like(user, comment));
             MessageResponseDto message = new MessageResponseDto(" 댓글 좋아요 성공" , HttpStatus.OK.value());
             return ResponseEntity.status(200).body(message);
         }
