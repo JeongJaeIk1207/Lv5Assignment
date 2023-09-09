@@ -13,8 +13,8 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 @Table(name = "comment")
+@NoArgsConstructor
 public class Comment extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,19 +31,17 @@ public class Comment extends Timestamped {
     @JoinColumn(name = "board_id", nullable = false)
     private Board board;
 
-//    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
-//    private List<Like> likesList = new ArrayList<>();
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
+    private List<Like> likessList = new ArrayList<>();
 
     public Comment(CommentRequestDto commentRequestDto, User user, Board board) {
-        this.comment = commentRequestDto.getComment();
         this.user = user;
         this.board = board;
+        this.comment = commentRequestDto.getComment();
     }
 
     public void update(CommentRequestDto commentRequestDto, User user) {
-        this.comment = commentRequestDto.getComment();
         this.user = user;
+        this.comment = commentRequestDto.getComment();
     }
-
-
 }

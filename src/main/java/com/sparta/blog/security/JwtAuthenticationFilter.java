@@ -52,6 +52,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         String token = jwtUtil.createToken(username, role);
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
+
         // 성공 내용 담아서 보내줄 수 있음
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");

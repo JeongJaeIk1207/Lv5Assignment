@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -22,6 +23,9 @@ public class Board extends Timestamped{
     private String contents;
     @Column(name = "title")
     private String title;
+//    @Column(name = "like_count")
+//    private int likeCount;
+
 
     @ManyToOne()
     @JoinColumn(name = "user_id", nullable = false)
@@ -30,8 +34,9 @@ public class Board extends Timestamped{
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<Comment> commentsList = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
-//    private List<Like> likesList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
+    private List<Like> likessList = new ArrayList<>();
 
     public Board(BoardRequestDto boardrequestDto, User user) {
         this.contents = boardrequestDto.getContents();
@@ -39,9 +44,11 @@ public class Board extends Timestamped{
         this.user = user;
     }
 
+
     public void update(BoardRequestDto boardrequestDto, User user) {
         this.contents = boardrequestDto.getContents();
         this.title = boardrequestDto.getTitle();
         this.user = user;
     }
+
 }
