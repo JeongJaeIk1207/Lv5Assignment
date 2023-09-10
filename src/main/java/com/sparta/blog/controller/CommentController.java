@@ -41,8 +41,8 @@ public class CommentController {
 
     // 좋아요
     @PutMapping("/comment/{id}/like")
-    public ResponseEntity<MessageResponseDto> likeBoard(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return commentService.likeBoard(id, userDetails.getUser());
+    public ResponseEntity<MessageResponseDto> likeComment(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return commentService.likeComment(id, userDetails.getUser());
     }
 
 

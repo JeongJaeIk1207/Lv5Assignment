@@ -16,8 +16,8 @@ public class BoardResponseDto {
     private String contents;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
-    private List<CommentResponseDto> commentList = new ArrayList<>();
     private Integer likeCount;
+    private List<CommentResponseDto> commentList = new ArrayList<>();
 
     public BoardResponseDto(Board board) {
         this.id = board.getId();

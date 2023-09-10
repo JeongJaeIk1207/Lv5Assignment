@@ -84,7 +84,7 @@ public class CommentService {
         }
 
     // 좋아요 기능 구현
-    public ResponseEntity<MessageResponseDto> likeBoard(Long id, User user) {
+    public ResponseEntity<MessageResponseDto> likeComment(Long id, User user) {
         Comment comment = findComment(id);
         Optional<Like> like = likeRepository.findByUserIdAndCommentId(user.getId(), id);
         if (like.isEmpty()) {
