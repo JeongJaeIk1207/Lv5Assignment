@@ -43,14 +43,20 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
         String tokenValue = jwtUtil.getJwtFromHeader(req);
 
-//        if(isEmpty(tokenValue)) {
-//            res.setContentType("application/json");
-//            res.setCharacterEncoding("UTF-8");
-//            res.setStatus(403);
-//            RestApiException restApiException = new RestApiException(403, "토큰이 유효하지 않습니다.");
-//            res.getWriter().write(new ObjectMapper().writeValueAsString(restApiException));
-//            return;
-//        }
+        if ("/api/auth/login".equals(req.getRequestURI()) || "/api/auth/signup".equals(req.getRequestURI())) {
+            // 토큰이 비어 있을 때 예외 처리를 하지 않도록 조건문 추가
+            filterChain.doFilter(req, res);
+            return;
+        }
+
+        if(isEmpty(tokenValue)) {
+            res.setContentType("application/json");
+            res.setCharacterEncoding("UTF-8");
+            res.setStatus(403);
+            RestApiException restApiException = new RestApiException(403, "토큰이 유효하지 않습니다.");
+            res.getWriter().write(new ObjectMapper().writeValueAsString(restApiException));
+            return;
+        }
 
         if (StringUtils.hasText(tokenValue)) {
 
