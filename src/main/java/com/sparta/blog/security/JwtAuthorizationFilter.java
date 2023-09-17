@@ -43,8 +43,11 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
         String tokenValue = jwtUtil.getJwtFromHeader(req);
 
-        if ("/api/auth/login".equals(req.getRequestURI()) || "/api/auth/signup".equals(req.getRequestURI())) {
-            // 토큰이 비어 있을 때 예외 처리를 하지 않도록 조건문 추가
+        if ("/api/auth/login".equals(req.getRequestURI()) ||
+                "/api/auth/signup".equals(req.getRequestURI()) ||
+                req.getRequestURI().startsWith( "/v3/") ||
+                req.getRequestURI().startsWith("/swagger-ui")) {
+// 토큰이 비어 있을 때 예외 처리를 하지 않도록 조건문 추가
             filterChain.doFilter(req, res);
             return;
         }
